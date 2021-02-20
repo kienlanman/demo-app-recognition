@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "StoreApp",
+    "name": "Voice Ship",
     "slug": "StoreApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/voice-logo.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kienvip090.StoreApp"
     },
     "android": {
       "adaptiveIcon": {
