@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, PermissionsAndroid } from 'react-native';
+import { StyleSheet, View, Button, PermissionsAndroid, Alert } from 'react-native';
 import { Buffer } from 'buffer';
 // import Permissions from 'react-native-permissions';
 // import * as Permissions from 'expo-permissions';
@@ -18,8 +18,13 @@ export default class Recognition extends Component<any, any> {
     super(props);
     this.state = {
       recording: null,
-      uri: null
+      uri: null,
+      isStop: false
     };
+  }
+
+  changeValueState = (value: any, nameState: any) => {
+    this.setState({ [nameState]: value })
   }
 
   setRecording = (value: any) => {
@@ -28,6 +33,7 @@ export default class Recognition extends Component<any, any> {
 
   startRecording = async () => {
     try {
+      this.changeValueState(true, "isStop");
       console.log('Requesting permissions..');
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
@@ -45,6 +51,7 @@ export default class Recognition extends Component<any, any> {
   }
 
   stopRecording = async () => {
+    this.changeValueState(false, "isStop");
     console.log('Stopping recording..');
     // this.setRecording(undefined);
     await this.state.recording.stopAndUnloadAsync();
@@ -113,6 +120,15 @@ export default class Recognition extends Component<any, any> {
       })
       .then(function (response) {
           console.log("Gui voice thanh cong");
+          const name = response.data;
+          Alert.alert(
+            "Thông báo",
+            "Xin chào "+ name,
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: false }
+          );
       })
       .catch(function (response) {
           //handle error
@@ -125,8 +141,8 @@ export default class Recognition extends Component<any, any> {
     return (
       <View style={styles.container}>
         <Button
-          title={this.state.recording ? 'Stop Recording' : 'Start Recording'}
-          onPress={this.state.recording ? this.stopRecording : this.startRecording}
+          title={this.state.isStop ? 'Stop Recording' : 'Start Recording'}
+          onPress={this.state.isStop ? this.stopRecording : this.startRecording}
         />
         <Button
           title={'Uploading record'}
