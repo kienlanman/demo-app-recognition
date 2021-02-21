@@ -23,6 +23,18 @@ export default class Recognition extends Component<any, any> {
     };
   }
 
+  componentDidMount = async () => {
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      playThroughEarpieceAndroid: false,
+      staysActiveInBackground: true,
+    });
+  }
+
   changeValueState = (value: any, nameState: any) => {
     this.setState({ [nameState]: value })
   }
@@ -75,15 +87,6 @@ export default class Recognition extends Component<any, any> {
   }
 
   playFileRecord = async (recording: Recording) => {
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
-      shouldDuckAndroid: true,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      playThroughEarpieceAndroid: false,
-      staysActiveInBackground: true,
-    });
     const { sound, status } = await recording.createNewLoadedSoundAsync(
       {
         isLooping: false,
