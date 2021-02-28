@@ -54,7 +54,7 @@ export default class Recognition extends Component<any, any> {
       });
       console.log('Starting recording..');
       const recording = new Audio.Recording();
-      await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY);
+      await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
       await recording.startAsync();
       this.setRecording(recording);
     } catch (err) {
@@ -117,7 +117,7 @@ export default class Recognition extends Component<any, any> {
     bodyFormData.append('file', dataFile);
     await axios({
       method: 'post',
-      url: 'http://192.168.1.8:5000/voice/send-voice',
+      url: 'http://192.168.0.101:5000/voice/send-voice',
       data: bodyFormData,
       headers: {'Content-Type': 'multipart/form-data' }
       })

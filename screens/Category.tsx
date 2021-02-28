@@ -15,7 +15,7 @@ export default class Category extends React.Component<any, any> {
   }
 
   searchVoice = () => {
-    axios.get('http://192.168.1.8:5000/voice/search').then (res => {
+    axios.get('http://192.168.0.101:5000/voice/search').then (res => {
       this.setState({
         voiceInfo: res.data
       })
@@ -29,7 +29,7 @@ export default class Category extends React.Component<any, any> {
   }
 
   deleteVoice = (id: any) => {
-    axios.delete(`http://192.168.1.8:5000/voice/delete/${id}`)
+    axios.delete(`http://192.168.0.101:5000/voice/delete/${id}`)
       .then(res => {
         console.log("Xoa thanh cong");
         this.searchVoice();
