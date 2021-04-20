@@ -26,7 +26,7 @@ export default class Recognition extends Component<any, any> {
   componentDidMount = async () => {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
       playsInSilentModeIOS: true,
       shouldDuckAndroid: true,
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
@@ -66,6 +66,9 @@ export default class Recognition extends Component<any, any> {
     this.changeValueState(false, "isStop");
     console.log('Stopping recording..');
     // this.setRecording(undefined);
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+    });
     await this.state.recording.stopAndUnloadAsync();
     // this.setRecording(undefined);
   }
@@ -117,7 +120,7 @@ export default class Recognition extends Component<any, any> {
     bodyFormData.append('file', dataFile);
     await axios({
       method: 'post',
-      url: 'http://192.168.0.101:5000/voice/send-voice',
+      url: 'voice/send-voice',
       data: bodyFormData,
       headers: {'Content-Type': 'multipart/form-data' }
       })

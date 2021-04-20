@@ -33,7 +33,7 @@ class AddVoiceScreen extends Component<any, any> {
         bodyFormData.append('name', name);
         axios({
             method: 'post',
-            url: 'http://192.168.0.101:5000/voice/save',
+            url: 'voice/save',
             data: bodyFormData,
             headers: { 'Content-Type': 'multipart/form-data' }
         })

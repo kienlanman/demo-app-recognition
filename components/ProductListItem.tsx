@@ -23,6 +23,7 @@ export default class ProductListItem extends React.Component<any, any> {
         const soundObject = new Audio.Sound();
         try {
             await soundObject.loadAsync({ uri: testUri });
+            await soundObject.setVolumeAsync(0.7);
             // await soundObject.loadAsync(resource);
             await soundObject.playAsync();
             // Your sound is playing!

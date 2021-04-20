@@ -62,6 +62,9 @@ export default class RecordComponent extends Component<any, any> {
   }
 
   stopRecording = async () => {
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+    });
     const {setDataCallBack} = this.props;
     console.log('Stopping recording..');
     // this.setRecording(undefined);
