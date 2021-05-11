@@ -63,7 +63,7 @@ export default class Category extends React.Component<any, any> {
             <Text style={styles.buttonText}>Thêm giọng</Text>
           </TouchableOpacity>
         <SearchBar
-          placeholder="Type Here..."
+          placeholder="Tìm kiếm..."
           onChangeText={this.updateSearch}
           value={search}
           platform="ios"

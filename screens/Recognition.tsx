@@ -89,6 +89,36 @@ export default class Recognition extends Component<any, any> {
     }
   }
 
+  playBase64Audio = async () => {
+    // Write the Base64 to a new location
+    const recording = this.state.recording as Recording;
+    let uri = recording.getURI();
+    if(uri == null) {
+      uri = '';
+    }
+    let fileBase64 = "";
+    await FileSystem.readAsStringAsync(uri.toString(), {encoding: FileSystem.EncodingType.Base64}).then(
+      res => fileBase64 = res
+    )
+    const options = { encoding: FileSystem.EncodingType.Base64 };
+    const testUri = FileSystem.documentDirectory + "demo_sound.mp3";
+    await FileSystem.writeAsStringAsync(testUri, fileBase64, options);
+    // Enable audio on the device
+    await Audio.setIsEnabledAsync(true);
+    // Play audio from the new Base64, or from the original reference. <3
+    const soundObject = new Audio.Sound();
+    try {
+        await soundObject.loadAsync({ uri: testUri });
+        await soundObject.setVolumeAsync(0.7);
+        // await soundObject.loadAsync(resource);
+        await soundObject.playAsync();
+        // Your sound is playing!
+    } catch (error) {
+        console.log(error);
+        // An error occurred!
+    }
+} 
+
   playFileRecord = async (recording: Recording) => {
     const { sound, status } = await recording.createNewLoadedSoundAsync(
       {
@@ -164,13 +194,22 @@ export default class Recognition extends Component<any, any> {
               onPress={this.startRecording}
             />
           }
+          onPress={this.state.isStop ? this.stopRecording : this.startRecording}
+          type="clear"
+        />
+         <Button
           title={this.state.isStop ? 'Stop Recording' : 'Start Recording'}
           onPress={this.state.isStop ? this.stopRecording : this.startRecording}
           type="clear"
         />
         <Button
-          title={'Uploading record'}
+          title={'Nhận dạng'}
           onPress={this.uploadAudio}
+          type="clear"
+        />
+         <Button
+          title={'Nghe Lại'}
+          onPress={this.playBase64Audio}
           type="clear"
         />
       </View>
