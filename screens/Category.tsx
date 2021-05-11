@@ -3,6 +3,7 @@ import axios from 'axios';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native';
 import ProductListItem from '../components/ProductListItem'
+import { SearchBar } from 'react-native-elements';
 
 export default class Category extends React.Component<any, any> {
   
@@ -10,14 +11,30 @@ export default class Category extends React.Component<any, any> {
     super(props);
     this.state = {
       voiceInfo: [
-      ]
+      ],
+      voiceInfoClone: [
+      ],
+      search: ""
     }
   }
 
-  searchVoice = () => {
-    axios.get('voice/search').then (res => {
+  updateSearch = (_search: string) => {
+    this.setState({ search:_search? _search: "" });
+    const listDataFilter = this.state.voiceInfoClone.filter(x => x.name.toLowerCase().includes(_search.toLocaleLowerCase()))
+    this.setState({
+      voiceInfo: listDataFilter
+    })
+  };
+
+  searchVoice = (_name?: string) => {
+    axios.get('voice/search', {
+      params: {
+        name: _name
+      }
+    }).then (res => {
       this.setState({
-        voiceInfo: res.data
+        voiceInfo: res.data,
+        voiceInfoClone: res.data
       })
     }).catch (error => {
       console.error(error);
@@ -38,12 +55,19 @@ export default class Category extends React.Component<any, any> {
 
   render() {
     const {navigation} = this.props;
+    const { search } = this.state;
     return <>
         <TouchableOpacity
             onPress={() => navigation.navigate('Add')}
             style={styles.button}>
             <Text style={styles.buttonText}>Thêm giọng</Text>
           </TouchableOpacity>
+        <SearchBar
+          placeholder="Type Here..."
+          onChangeText={this.updateSearch}
+          value={search}
+          platform="ios"
+        />
         <FlatList data={this.state.voiceInfo}
           numColumns={1}
           renderItem={({item}) =>  <View style={styles.wrapper}>
@@ -51,7 +75,7 @@ export default class Category extends React.Component<any, any> {
           </View>}
           keyExtractor={item => item.objectId.toString()}
           contentContainerStyle={styles.container}
-          onMomentumScrollEnd={this.searchVoice}
+          onMomentumScrollEnd={() => this.searchVoice()}
         />
     </>
   }

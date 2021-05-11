@@ -4,17 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Categories from '../screens/Categories'
 import Category from '../screens/Category'
 import Recognition from '../screens/Recognition'
 import AddVoiceScreen from '../screens/AddVoiceScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-function HomeScreen({navigation} : {navigation: any}) {
-    return (
-        <Categories navigation={navigation}/>
-    );
-}
 
 function Second({navigation}:  {navigation: any}) {
     return (

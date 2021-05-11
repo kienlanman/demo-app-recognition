@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, PermissionsAndroid, Alert } from 'react-native';
-import { Buffer } from 'buffer';
+import { StyleSheet, View, Alert, Text } from 'react-native';
 // import Permissions from 'react-native-permissions';
 // import * as Permissions from 'expo-permissions';
 // import Sound from 'react-native-sound';
@@ -10,6 +9,7 @@ import { Recording } from 'expo-av/build/Audio';
 import * as FileSystem from "expo-file-system";
 import axios from 'axios';
 import CommonUltils from '../ultils/CommonUltils';
+import { Button, Icon } from 'react-native-elements'
 
 
 export default class Recognition extends Component<any, any> {
@@ -147,12 +147,31 @@ export default class Recognition extends Component<any, any> {
     return (
       <View style={styles.container}>
         <Button
+          icon={
+            this.state.isStop ? <Icon
+              reverse
+              name='ios-recording'
+              type='ionicon'
+              color='#517fa4'
+              style={styles.middle}
+              onPress={this.stopRecording}
+            /> : <Icon
+              reverse
+              name='ios-recording-outline'
+              type='ionicon'
+              color='#517fa4'
+              style={styles.middle}
+              onPress={this.startRecording}
+            />
+          }
           title={this.state.isStop ? 'Stop Recording' : 'Start Recording'}
           onPress={this.state.isStop ? this.stopRecording : this.startRecording}
+          type="clear"
         />
         <Button
           title={'Uploading record'}
           onPress={this.uploadAudio}
+          type="clear"
         />
       </View>
     );
@@ -163,6 +182,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center'
+  },
+  middle: {
+    // textAlign:'center'
   },
   row: {
     flexDirection: 'row',
