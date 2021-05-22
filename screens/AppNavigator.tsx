@@ -14,9 +14,9 @@ function Second({navigation}:  {navigation: any}) {
         <Category navigation={navigation}/>
     );
 }
-function Add({navigation}: {navigation: any}) {
+function Add({navigation, route}: {navigation: any, route: any}) {
     return (
-        <AddVoiceScreen navigation={navigation}/>
+        <AddVoiceScreen navigation={navigation} route={route}/>
     );
 }
 

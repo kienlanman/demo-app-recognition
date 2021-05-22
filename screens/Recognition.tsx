@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Alert, Text } from 'react-native';
+import {ActivityIndicator, StyleSheet, View, Alert, Text } from 'react-native';
 // import Permissions from 'react-native-permissions';
 // import * as Permissions from 'expo-permissions';
 // import Sound from 'react-native-sound';
@@ -19,7 +19,8 @@ export default class Recognition extends Component<any, any> {
     this.state = {
       recording: null,
       uri: null,
-      isStop: false
+      isStop: false,
+      isLoading: false
     };
   }
 
@@ -73,29 +74,22 @@ export default class Recognition extends Component<any, any> {
     // this.setRecording(undefined);
   }
 
-  playingRecord = async () => {
-    console.log("play", this.state.uri)
-    try {
-      const {
-        sound: soundObject,
-        status,
-      } = await Audio.Sound.createAsync(this.state.uri, { shouldPlay: true });
-      await soundObject.playAsync();
-      // Your sound is playing!
-
-      // Don't forget to unload the sound from memory
-      // when you are done using the Sound object
-    } catch (error) {
-    }
-  }
-
   playBase64Audio = async () => {
     // Write the Base64 to a new location
     const recording = this.state.recording as Recording;
-    let uri = recording.getURI();
-    if(uri == null) {
-      uri = '';
+    if(recording == null) {
+      Alert.alert(
+        "Thông báo",
+        "Bạn chưa nói giọng nào",
+        [
+          { text: "OK" }
+        ],
+        { cancelable: false }
+      );
+      return;
     }
+    let uri = recording.getURI();
+    uri =  uri ?? "";
     let fileBase64 = "";
     await FileSystem.readAsStringAsync(uri.toString(), {encoding: FileSystem.EncodingType.Base64}).then(
       res => fileBase64 = res
@@ -119,34 +113,27 @@ export default class Recognition extends Component<any, any> {
     }
 } 
 
-  playFileRecord = async (recording: Recording) => {
-    const { sound, status } = await recording.createNewLoadedSoundAsync(
-      {
-        isLooping: false,
-        isMuted: false,
-        volume: 1.0,
-        rate: 1.0,
-        shouldCorrectPitch: true,
-      },
-    );
-    console.log(`Stop and play sound`);
-    sound.playAsync();
-  }
-
   uploadAudio = async () => {
     const recording = this.state.recording as Recording;
+    if (recording == null) {
+      Alert.alert(
+        "Thông báo",
+        "Bạn chưa nói giọng nào",
+        [
+          { text: "OK" }
+        ],
+        { cancelable: false }
+      );
+      return;
+    }
+    this.setState({isLoading: true});
     var bodyFormData = new FormData();
     let uri = recording.getURI();
-    if(uri == null) {
-      uri = '';
-    }
-    let dataFile = null;
+    uri =  uri ?? "";
+    let dataFile = '';
     await FileSystem.readAsStringAsync(uri.toString(), {encoding: FileSystem.EncodingType.Base64}).then(
       res => dataFile = res
     )
-    if(dataFile == null){
-      dataFile = '';
-    }
     bodyFormData.append('file', dataFile);
     await axios({
       method: 'post',
@@ -170,12 +157,14 @@ export default class Recognition extends Component<any, any> {
           //handle error
           console.log("Gui voice that bai");
     });
+    this.setState({isLoading: false});
   };
 
   render() {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
+        <ActivityIndicator size="large" animating={this.state.isLoading}/>
         <Button
           icon={
             this.state.isStop ? <Icon

@@ -5,9 +5,12 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import RecordComponent from '../components/RecordComponent'
+import { Audio } from 'expo-av';
+import * as FileSystem from "expo-file-system";
 
 class AddVoiceScreen extends Component<any, any> {
     constructor(props: any) {
@@ -24,9 +27,20 @@ class AddVoiceScreen extends Component<any, any> {
 
 
     addVoice = () => {
-        const { navigation } = this.props;
+        const { navigation, route } = this.props;
         // destructure state
         const { name, voice } = this.state;
+        if(!voice){
+            Alert.alert(
+                "Thông báo",
+                "Bạn chưa nói giọng nào",
+                [
+                  { text: "OK" }
+                ],
+                { cancelable: false }
+            );
+            return;
+        }
         var bodyFormData = new FormData();
 
         bodyFormData.append('voice', voice);
@@ -38,6 +52,16 @@ class AddVoiceScreen extends Component<any, any> {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then(res => {
+            Alert.alert(
+                "Thông báo",
+                "Thêm giọng thành công",
+                [
+                  { text: "OK" }
+                ],
+                { cancelable: false }
+            );
+            console.log("param: ", route.params);
+            route.params?.searchVoice();
             console.log("Them thanh cong");
         })
         .catch(error => {
@@ -46,6 +70,39 @@ class AddVoiceScreen extends Component<any, any> {
          });
          navigation.navigate('Details');
     };
+
+    playBase64Audio = async () => {
+        const { voice } = this.state;
+        if(!voice){
+            Alert.alert(
+                "Thông báo",
+                "Bạn chưa nói giọng nào",
+                [
+                  { text: "OK" }
+                ],
+                { cancelable: false }
+            );
+            return;
+        }
+        // Write the Base64 to a new location
+        const options = { encoding: FileSystem.EncodingType.Base64 };
+        const testUri = FileSystem.documentDirectory + "demo_sound.mp3";
+        await FileSystem.writeAsStringAsync(testUri, voice, options);
+        // Enable audio on the device
+        await Audio.setIsEnabledAsync(true);
+        // Play audio from the new Base64, or from the original reference. <3
+        const soundObject = new Audio.Sound();
+        try {
+            await soundObject.loadAsync({ uri: testUri });
+            await soundObject.setVolumeAsync(0.7);
+            // await soundObject.loadAsync(resource);
+            await soundObject.playAsync();
+            // Your sound is playing!
+        } catch (error) {
+            console.log(error);
+            // An error occurred!
+        }
+    }
 
     render() {
         return (
@@ -63,9 +120,17 @@ class AddVoiceScreen extends Component<any, any> {
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
+                        onPress={this.playBase64Audio}
+                        style={{ ...styles.button, marginVertical: 0 }}>
+                        <Text style={styles.buttonText}>Nghe lại</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
                         onPress={this.addVoice}
                         style={{ ...styles.button, marginVertical: 0 }}>
-                        <Text style={styles.buttonText}>Submit</Text>
+                        <Text style={styles.buttonText}>Thêm</Text>
                     </TouchableOpacity>
                 </View>
 

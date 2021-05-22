@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import ProductListItem from '../components/ProductListItem'
 import { SearchBar } from 'react-native-elements';
 
@@ -49,6 +49,14 @@ export default class Category extends React.Component<any, any> {
     axios.delete(`voice/delete/${id}`)
       .then(res => {
         console.log("Xoa thanh cong");
+        Alert.alert(
+          "Thông báo",
+          "Xóa giọng thành công",
+          [
+            { text: "OK" }
+          ],
+          { cancelable: false }
+        );
         this.searchVoice();
       })
   }
@@ -58,7 +66,7 @@ export default class Category extends React.Component<any, any> {
     const { search } = this.state;
     return <>
         <TouchableOpacity
-            onPress={() => navigation.navigate('Add')}
+            onPress={() => navigation.navigate('Add', {searchVoice: this.searchVoice})}
             style={styles.button}>
             <Text style={styles.buttonText}>Thêm giọng</Text>
           </TouchableOpacity>
