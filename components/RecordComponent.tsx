@@ -84,7 +84,7 @@ export default class RecordComponent extends Component<any, any> {
   render() {
     return (
         <Button
-          title={this.state.recording ? 'Stop Recording' : 'Start Recording'}
+          title={this.state.recording ? 'Dừng' : 'Ghi âm'}
           onPress={this.state.recording ? this.stopRecording : this.startRecording}
         />
     );

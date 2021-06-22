@@ -66,7 +66,9 @@ export default class Category extends React.Component<any, any> {
     const { search } = this.state;
     return <>
         <TouchableOpacity
-            onPress={() => navigation.navigate('Add', {searchVoice: this.searchVoice})}
+            onPress={() => { 
+              navigation.navigate('Add', {_searchVoice: this.searchVoice})
+            }}
             style={styles.button}>
             <Text style={styles.buttonText}>Thêm giọng</Text>
           </TouchableOpacity>

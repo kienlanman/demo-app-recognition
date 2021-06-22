@@ -60,8 +60,7 @@ class AddVoiceScreen extends Component<any, any> {
                 ],
                 { cancelable: false }
             );
-            console.log("param: ", route.params);
-            route.params?.searchVoice();
+            route.params?._searchVoice();
             console.log("Them thanh cong");
         })
         .catch(error => {
@@ -107,12 +106,12 @@ class AddVoiceScreen extends Component<any, any> {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Add New Voice</Text>
+                <Text style={styles.title}>Thêm giọng mới</Text>
 
                 <TextInput
                     style={styles.textBox}
                     onChangeText={(text) => this.handleChange(text, "name")}
-                    placeholder="Full Name" />
+                    placeholder="Tên" />
 
                 <View style={styles.buttonContainer}>
                     <RecordComponent setDataCallBack={(text: any) => this.handleChange(text, "voice")} />

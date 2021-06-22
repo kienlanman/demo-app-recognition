@@ -42,9 +42,9 @@ export default class ProductListItem extends React.Component<any, any> {
                     <View style={styles.info}>
                         <Text style={styles.name}>{product.name}</Text>
                         <View style={styles.priceRow}>
-                            <TouchableOpacity>
+                            {/* <TouchableOpacity>
                                 <Text style={styles.editButton}>Sửa</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <TouchableOpacity
                                 onPress={() => deleteVoice(product.objectId)}
                             >

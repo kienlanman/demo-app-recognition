@@ -135,6 +135,7 @@ export default class Recognition extends Component<any, any> {
       res => dataFile = res
     )
     bodyFormData.append('file', dataFile);
+    console.log("da gui request")
     await axios({
       method: 'post',
       url: 'voice/send-voice',
@@ -187,7 +188,7 @@ export default class Recognition extends Component<any, any> {
           type="clear"
         />
          <Button
-          title={this.state.isStop ? 'Stop Recording' : 'Start Recording'}
+          title={this.state.isStop ? 'Dừng' : 'Ghi âm'}
           onPress={this.state.isStop ? this.stopRecording : this.startRecording}
           type="clear"
         />
